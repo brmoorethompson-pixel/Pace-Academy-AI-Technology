@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Frequency — AI Ethics & Literacy</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0E1620;
+  --surface: #162030;
+  --surface2: #1C2A3A;
+  --surface3: #223040;
+  --border: #2A3F52;
+  --border2: #354E64;
+  --text: #E8EFF5;
+  --soft: #7A9BB5;
+  --muted: #4A6880;
+  --amber: #E8923A;
+  --amber-dim: #3A2510;
+  --green: #4CAF82;
+  --green-dim: #122A1E;
+  --red: #D05A48;
+  --red-dim: #2A1210;
+  --blue: #4A8FD4;
+  --blue-dim: #0E2238;
+  --purple: #8A6ED4;
+  --r: 6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 80px;
+}
+
+/* ── HEADER ── */
+.site-header {
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: rgba(14,22,32,0.96);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+.logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+.logo span { color: var(--amber); }
+.header-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.progress-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.progress-pips {
+  display: flex;
+  gap: 5px;
+}
+.pip {
+  width: 28px;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  transition: background 0.4s ease;
+}
+.pip.done { background: var(--amber); }
+.pip.active { background: var(--amber); opacity: 0.5; }
+
+/* ── MAIN WRAP ── */
+.main {
+  width: 100%;
+  max-width: 720px;
+  padding: 0 20px;
+  margin-top: 48px;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 40px 44px;
+  animation: fadeUp 0.35s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card + .card { margin-top: 16px; }
+
+/* ── INTRO ── */
+.intro-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--amber);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.intro-eyebrow::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--amber);
+}
+.intro-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+.intro-title em { color: var(--amber); font-style: normal; }
+.intro-body {
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--soft);
+  margin-bottom: 28px;
+}
+.intro-body strong { color: var(--text); font-weight: 600; }
+.callout-block {
+  background: var(--surface2);
+  border-left: 3px solid var(--amber);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  font-size: 14px;
+  color: var(--soft);
+  line-height: 1.65;
+}
+.role-select-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.role-btn {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 12px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.18s ease;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+}
+.role-btn:hover { border-color: var(--amber); background: var(--amber-dim); }
+.role-btn.selected { border-color: var(--amber); background: var(--amber-dim); }
+.role-icon { font-size: 22px; margin-bottom: 8px; }
+.role-name { font-size: 13px; font-weight: 600; }
+.role-sub { font-size: 11.5px; color: var(--soft); margin-top: 3px; }
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.how-item {
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+  background: var(--surface2);
+}
+.how-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.how-desc { font-size: 12.5px; color: var(--soft); line-height: 1.5; }
+.start-btn {
+  width: 100%;
+  background: var(--amber);
+  color: #1A0E04;
+  border: none;
+  border-radius: var(--r);
+  padding: 16px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.start-btn:hover { opacity: 0.9; }
+.start-btn:disabled { opacity: 0.35; cursor: default; }
+
+/* ── VOCAB ROUND ── */
+.round-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.round-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.term-display {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+  line-height: 1.1;
+}
+.term-context {
+  font-size: 13.5px;
+  color: var(--soft);
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+.choices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.choice {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 18px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  color: var(--text);
+  text-align: left;
+  line-height: 1.5;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.choice:hover:not(:disabled) { border-color: var(--amber); background: var(--amber-dim); transform: translateX(2px); }
+.choice:disabled { cursor: default; }
+.choice.correct { border-color: var(--green); background: var(--green-dim); }
+.choice.wrong { border-color: var(--red); background: var(--red-dim); }
+.choice-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.vocab-result {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  animation: fadeUp 0.3s ease;
+}
+.result-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.result-status.ok { color: var(--green); }
+.result-status.no { color: var(--red); }
+.result-body {
+  font-size: 14px;
+  color: var(--soft);
+  line-height: 1.7;
+}
+.result-body strong { color: var(--text); }
+.next-btn {
+  margin-top: 20px;
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 13px 22px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.next-btn:hover { border-color: var(--amber); background: var(--amber-dim); color: var(--amber); }
+
+/* ── SCENARIO ── */
+.scenario-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.scenario-who {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+.scenario-term-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--amber);
+  border: 1px solid var(--amber-dim);
+  border-radius: 20px;
+  padding: 4px 10px;
+  background: var(--amber-dim);
+  white-space: nowrap;
+}
+.scenario-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+.scenario-scene {
+  background: var(--surface2);
+  border-left: 3px solid var(--border2);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 18px 20px;
+  font-size: 14.5px;
+  color: var(--soft);
+  line-height: 1.75;
+  margin-bottom: 28px;
+  font-style: italic;
+}
+.tension-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.scenario-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.s-choice {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px 20px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  text-align: left;
+  line-height: 1.6;
+  transition: all 0.18s ease;
+  display: flex;
+  gap: 14px;
+}
+.s-choice:hover:not(:disabled) { border-color: var(--amber); background: var(--amber-dim); }
+.s-choice:disabled { cursor: default; }
+.s-choice.selected-deep { border-color: var(--green); background: var(--green-dim); }
+.s-choice.selected-mid  { border-color: var(--blue); background: var(--blue-dim); }
+.s-choice.selected-low  { border-color: var(--red); background: var(--red-dim); }
+.s-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+/* ── FEEDBACK ── */
+.feedback-card {
+  margin-top: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  animation: fadeUp 0.3s ease;
+}
+.feedback-top {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.depth-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.depth-deep { color: var(--green); }
+.depth-mid  { color: var(--blue); }
+.depth-low  { color: var(--red); }
+.feedback-choice-echo {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+}
+.feedback-choice-echo span { color: var(--soft); font-style: normal; }
+.feedback-body-wrap { padding: 20px 24px; }
+.feedback-main {
+  font-size: 14.5px;
+  color: var(--soft);
+  line-height: 1.75;
+  margin-bottom: 20px;
+}
+.feedback-main strong { color: var(--text); }
+.tension-reveal {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+.tension-reveal-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.tension-reveal-body {
+  font-size: 13.5px;
+  color: var(--soft);
+  line-height: 1.65;
+}
+.reflection-wrap {
+  margin-bottom: 20px;
+}
+.reflection-label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+textarea.reflect {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  color: var(--text);
+  resize: none;
+  height: 80px;
+  line-height: 1.6;
+}
+textarea.reflect:focus { outline: none; border-color: var(--amber); }
+textarea.reflect::placeholder { color: var(--muted); }
+.reflect-hint {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* ── DEPTH METER ── */
+.depth-meter-wrap {
+  margin-bottom: 20px;
+}
+.depth-meter-heads {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.depth-track {
+  height: 6px;
+  background: var(--surface3);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+.depth-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── SUMMARY ── */
+.summary-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.summary-persona-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.persona-icon-big { font-size: 48px; flex-shrink: 0; }
+.summary-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+.summary-subtitle { font-size: 14px; color: var(--soft); line-height: 1.6; }
+.summary-blurb {
+  font-size: 15px;
+  color: var(--soft);
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px 16px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 6px;
+  color: var(--amber);
+}
+.stat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.section-head {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.glossary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.g-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+}
+.g-term {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--amber);
+  margin-bottom: 6px;
+}
+.g-def { font-size: 12.5px; color: var(--soft); line-height: 1.55; }
+.case-log { display: flex; flex-direction: column; gap: 8px; margin-bottom: 32px; }
+.log-row {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.log-left { flex: 1; }
+.log-scenario { font-size: 12.5px; color: var(--muted); margin-bottom: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.04em; }
+.log-choice { font-size: 13.5px; color: var(--soft); line-height: 1.4; }
+.log-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+.badge-deep { background: var(--green-dim); color: var(--green); border: 1px solid var(--green); }
+.badge-mid  { background: var(--blue-dim);  color: var(--blue);  border: 1px solid var(--blue); }
+.badge-low  { background: var(--red-dim);   color: var(--red);   border: 1px solid var(--red); }
+.closing-note {
+  background: var(--surface2);
+  border-left: 3px solid var(--amber);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 18px 20px;
+  font-size: 14px;
+  color: var(--soft);
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+.restart-btn {
+  width: 100%;
+  background: var(--surface2);
+  border: 1.5px solid var(--border2);
+  border-radius: var(--r);
+  padding: 15px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.restart-btn:hover { border-color: var(--amber); color: var(--amber); }
+.kbd { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); background: var(--surface3); border: 1px solid var(--border); border-radius: 3px; padding: 2px 5px; }
+.kbd-hint { font-size: 11.5px; color: var(--muted); margin-top: 10px; }
+
+@media (max-width: 600px) {
+  .card { padding: 24px 20px; }
+  .role-grid, .how-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(3,1fr); }
+  .glossary-grid { grid-template-columns: 1fr; }
+  .term-display { font-size: 30px; }
+  .intro-title { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">The <span>Frequency</span></div>
+  <div class="progress-header">
+    <div class="progress-pips" id="pips"></div>
+    <div class="header-meta" id="headerMeta">AI Ethics & Literacy</div>
+  </div>
+</header>
+
+<div class="main" id="main"></div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+const VOCAB = [
+  {
+    term: "Algorithmic Bias",
+    context: "as it appears in educational AI tools",
+    defs: [
+      { text: "When an AI system produces results that systematically favor or disadvantage groups based on patterns in its training data — not because a human intentionally programmed it that way.", correct: true },
+      { text: "A deliberate decision by an AI company to make their software prefer certain types of students.", correct: false },
+      { text: "The tendency for students to prefer AI tools that give them easier answers.", correct: false },
+    ],
+    explanation: "<strong>Algorithmic bias</strong> is not intentional discrimination — it is the downstream effect of training data that reflects historical inequities. An AI grading tool trained mostly on essays from wealthy schools may systematically score differently for students whose writing style or cultural references differ from that training set. This is not a bug a developer chose; it is a structural problem that requires structural awareness."
+  },
+  {
+    term: "Cognitive Offloading",
+    context: "in the context of student learning",
+    defs: [
+      { text: "Using technology to outsource mental work — like calculations, memory, or reasoning — that your brain would otherwise do.", correct: true },
+      { text: "The process of downloading AI tools to a personal device for offline use.", correct: false },
+      { text: "When a student copies work directly from the internet without paraphrasing.", correct: false },
+    ],
+    explanation: "<strong>Cognitive offloading</strong> is not inherently bad — humans have offloaded to books, calculators, and spell-checkers for generations. The educational question is: which cognitive tasks are worth doing yourself because the struggle is the learning? Using AI to draft a first paragraph you immediately replace with your own thinking is different from submitting the AI paragraph as your work. The line lives in whether your own thinking was ever engaged."
+  },
+  {
+    term: "Hallucination",
+    context: "when discussing AI-generated content",
+    defs: [
+      { text: "When an AI generates information that sounds confident and authoritative but is factually incorrect or entirely fabricated.", correct: true },
+      { text: "A creative mode in AI tools that allows them to produce artistic or fictional content.", correct: false },
+      { text: "The visual distortion that occurs when AI image generators produce surreal or dreamlike imagery.", correct: false },
+    ],
+    explanation: "<strong>AI hallucination</strong> is one of the most dangerous features of current large language models because the errors are not random noise — they are fluent, well-formatted, and often plausible. An AI will cite a court case that does not exist, attribute a quote to a real person who never said it, or invent a statistic with a real-sounding source. The confidence of the output gives no signal about its accuracy. Verification is not optional."
+  },
+  {
+    term: "Informed Consent",
+    context: "in the context of AI and student data",
+    defs: [
+      { text: "A student or family's knowing agreement — after being told how their data will be used — to participate in a program or allow their information to be collected.", correct: true },
+      { text: "When a student decides independently to use an AI tool without their teacher's permission.", correct: false },
+      { text: "Legal language schools include in handbooks that releases them from responsibility for third-party software.", correct: false },
+    ],
+    explanation: "<strong>Informed consent</strong> requires that the person agreeing actually understands what they are agreeing to. When schools adopt AI tools, students and families are often not told which data those tools collect, how it is stored, who it is shared with, or whether it is used to train future models. A click-through agreement that no one reads is technically consent. It is not meaningfully informed."
+  },
+  {
+    term: "Agentic AI",
+    context: "in its most current definition",
+    defs: [
+      { text: "AI systems that can plan, make decisions, and take multi-step actions with minimal human supervision — not just responding to a single prompt.", correct: true },
+      { text: "An AI tool that has been given a specific area of expertise, like a math tutor or writing assistant.", correct: false },
+      { text: "Software that acts on behalf of a company's marketing department to automate outreach.", correct: false },
+    ],
+    explanation: "<strong>Agentic AI</strong> represents a fundamental shift from AI as a tool you query to AI as a system that acts. Rather than answering a question, an agentic system might browse the web, draft emails, book calendar time, run code, and synthesize a report — all in response to a single high-level instruction. For educators, this raises immediate questions: what does authentic student work look like when AI can complete entire assignments autonomously, and how do we prepare students to supervise rather than just use these systems?"
+  },
+  {
+    term: "Model Transparency",
+    context: "as a concept in AI governance",
+    defs: [
+      { text: "The degree to which an AI system's training data, decision-making process, and design choices are accessible and understandable to the people affected by it.", correct: true },
+      { text: "The ability to see through an AI chatbot's interface to the source websites it is drawing from.", correct: false },
+      { text: "When an AI company publishes its financial information publicly.", correct: false },
+    ],
+    explanation: "<strong>Model transparency</strong> does not mean every user can read the code — it means the people affected by an AI system have reasonable access to understanding how it works and what it was built on. A grading tool that cannot explain why it scored a student's essay a particular way, whose training data cannot be audited, or whose error rates for different demographic groups are not published is a transparency problem. Schools adopting AI tools have a legitimate interest in demanding this."
+  },
+  {
+    term: "Digital Equity",
+    context: "in the context of AI in schools",
+    defs: [
+      { text: "The condition in which every student has meaningful access to the technology, connectivity, devices, and digital literacy skills needed to fully participate in AI-integrated education.", correct: true },
+      { text: "A school policy requiring that all students receive the same devices regardless of their learning needs.", correct: false },
+      { text: "Equal screen time regulations that prevent any one student from using technology more than another.", correct: false },
+    ],
+    explanation: "<strong>Digital equity</strong> is not just about who has a laptop. A student can have a device and still lack broadband access at home, a quiet space to work, an adult who can help troubleshoot, or the foundational digital literacy skills to evaluate AI output critically. When schools build AI into their curriculum without assessing and addressing these gaps, they risk creating a two-track system where AI accelerates outcomes for students who already have advantages and widens the gap for those who do not."
+  },
+  {
+    term: "Surveillance Creep",
+    context: "as a risk in school AI adoption",
+    defs: [
+      { text: "The gradual expansion of monitoring technology over time, where tools introduced for one limited purpose slowly become used to track student and staff behavior more broadly.", correct: true },
+      { text: "When students use AI to impersonate school administrators in emails or communications.", correct: false },
+      { text: "The slow replacement of security cameras with AI-powered alternatives.", correct: false },
+    ],
+    explanation: "<strong>Surveillance creep</strong> often begins with a defensible goal — an AI plagiarism detector, a behavior monitoring system, or a productivity tracker — and expands in ways no one explicitly decided. Data collected to detect cheating begins to inform disciplinary decisions. Keystroke monitoring introduced for test security runs in the background of regular classwork. The pattern is not malicious; it is the natural tendency of institutions to use available data. The question for school leaders is not just what a tool does today, but what it enables tomorrow."
+  },
+];
+
+const SCENARIOS = [
+  {
+    who: "Student",
+    term: "Cognitive Offloading",
+    title: "The Essay That Wrote Itself",
+    scene: "You spent two weeks reading and annotating a novel for your AP English class. You know the themes cold. The night before the essay is due, you're exhausted and use AI to generate a first draft. You rewrite most sentences, change the structure, add your own examples, and feel like the final version sounds like you. Your teacher's rubric says 'no AI without disclosure.'",
+    tensions: "Academic integrity vs. using tools as scaffolding vs. what the rubric actually prohibits",
+    choices: [
+      { text: "Submit it as-is. You rewrote it substantially — the thinking is yours and the AI was just a starting point like any other tool.", depth: "low", label: "Surface reasoning", feedback: "This misses an important distinction. The rubric required disclosure — not because the final product is entirely AI-generated, but because the teacher cannot assess your independent thinking if they don't know a significant part of the drafting process was automated. The fact that you rewrote it doesn't change that a tool that was explicitly subject to a disclosure requirement was used without disclosure. The intent of the rule matters here, not just the letter.", tension: "Transparent disclosure is not just about the product — it is about the process the teacher is trying to evaluate." },
+      { text: "Submit it but add a note explaining how you used AI — what you used it for, what you changed, and why you made those choices.", depth: "deep", label: "Principled transparency", feedback: "This is the strongest choice because it meets the rubric's disclosure requirement while also demonstrating something more sophisticated: metacognitive awareness of your own process. A student who can say 'I used AI to generate an initial structure, identified three places where it missed the theme of isolation, and rewrote those sections from my own reading notes' is showing more advanced thinking than a student who drafted independently and turned in a weaker essay.", tension: "Transparency about AI use often reveals more about a student's depth of thinking than the final product does." },
+      { text: "Delete it, start from scratch tonight, and never tell anyone. The disclosure policy is unclear and the stress is real.", depth: "mid", label: "Risk avoidance", feedback: "Starting from scratch is honest, and the stress is real. But the reasoning matters: deleting it out of fear of being caught is different from deleting it because you've decided the policy applies and you want to meet it. The first is self-protective; the second is principled. Both end in the same submission, but your relationship to the rule — and to your own work — is different in each case.", tension: "The decision to follow a rule from principle rather than from fear of consequences is actually a different act than it looks from the outside." },
+    ]
+  },
+  {
+    who: "Teacher",
+    term: "Algorithmic Bias",
+    title: "The Grading Tool Your Department Adopted",
+    scene: "Your department head has introduced an AI writing assessment tool that scores student essays and flags them for revision. You start noticing a pattern: your students from certain cultural backgrounds — whose writing style is technically correct but stylistically different from the tool's apparent training set — are consistently scored lower than their in-class work suggests they should be. When you raise it, you're told the tool is 'research validated' and to keep using it.",
+    tensions: "Institutional authority vs. professional obligation vs. student advocacy",
+    choices: [
+      { text: "Keep using it but quietly adjust grades upward for students you believe are being unfairly scored. The fight isn't worth it.", depth: "low", label: "Private workaround", feedback: "Adjusting quietly solves the symptom for the students in front of you but leaves the system problem untouched — for your students next year, and for every class in the building that uses this tool. It also puts you in a structurally compromised position: you're operating outside the tool's stated purpose without institutional knowledge. If your adjustments were ever questioned, you'd have no defensible basis for them. It is a compassionate choice that avoids a necessary institutional conversation.", tension: "Individual workarounds do not fix structural problems — they obscure them." },
+      { text: "Document specific examples, bring your data to the department head, and request that the school audit the tool's scoring patterns before continuing to use it.", depth: "deep", label: "Evidence-based advocacy", feedback: "This is the most professionally rigorous and ethically sound response. You are not refusing the tool or claiming the tool is definitively biased — you are doing what a professional educator should do when they observe a pattern that concerns them: documenting it systematically and bringing it to the people who can investigate it. 'Research validated' is not a complete answer if the validation did not include demographic disaggregation of the tool's error rates.", tension: "Calling something 'research-based' does not exempt it from ongoing critical evaluation, especially when your own professional observation of your own students conflicts with the tool's output." },
+      { text: "Bring it up once in a department meeting, accept that you were overruled, and move on. You're not in a position to push back harder.", depth: "mid", label: "Single escalation", feedback: "Raising it once is better than silence, and accepting institutional decisions is sometimes the only realistic option. The ethical weight here depends on what happens next: if you accept the decision and disengage, the students bearing the cost of the tool's patterns continue to do so without an advocate. If you accept the decision while continuing to observe and document, you preserve the ability to raise it again with stronger evidence. The question is whether accepting means yielding or simply waiting.", tension: "Institutional deference and professional abdication can look identical from the outside but are ethically distinct." },
+    ]
+  },
+  {
+    who: "Administrator",
+    term: "Informed Consent",
+    title: "The Student Data Partnership",
+    scene: "A well-regarded ed-tech company approaches your school with a free AI tutoring platform. The contract requires that anonymized student performance data be used to improve the company's models. Legal has reviewed it and says it's FERPA compliant. The platform is genuinely useful and free. One parent raises concerns at a board meeting about what 'anonymized' actually means and whether families were truly informed.",
+    tensions: "Institutional benefit vs. family rights vs. meaningful transparency",
+    choices: [
+      { text: "The contract is FERPA compliant and legal approved it. Proceed. The parent's concern is noted but one objection doesn't override a vetted decision.", depth: "low", label: "Compliance as ceiling", feedback: "FERPA compliance is a legal floor, not an ethical ceiling. The law was written before AI model training existed as a practice, and 'anonymized' is a term whose meaning is genuinely contested in the data science community — re-identification from supposedly anonymous student datasets is a documented and researched vulnerability. A parent asking what anonymized means and whether families were truly informed is asking exactly the right questions. Dismissing it as a single objection misses what the question actually is.", tension: "Legal compliance tells you what you are allowed to do. It does not always tell you what you should do." },
+      { text: "Pause the rollout, publish the full contract terms in plain language, hold a family information session, and collect explicit opt-in consent before any student data flows to the vendor.", depth: "deep", label: "Meaningful transparency", feedback: "This is the highest-integrity path and also, in practice, the most defensible one if any data-related incident occurs later. Publishing the actual terms in plain language — not legalese — and collecting explicit opt-in rather than opt-out consent demonstrates that the school's relationship with families is one of genuine partnership. It also tests whether the platform is as universally valued as the administration believes: if most families opt in after being fully informed, that is a meaningful data point about community trust.", tension: "The difference between opt-in and opt-out consent is not bureaucratic — it reflects a fundamentally different assumption about whose burden it is to protect family data." },
+      { text: "Send a school-wide notice summarizing the partnership in simple terms, give families a 30-day window to opt out, and proceed.", depth: "mid", label: "Opt-out notification", feedback: "This is a meaningful improvement over proceeding without notice, and opt-out mechanisms are standard practice in many contexts. The limitation is that opt-out assumes informed silence equals agreement — it shifts the burden of protection onto families who may not have the time, language access, or technical knowledge to understand what they're opting out of. For a population with high trust in the institution, very few will opt out even when they might if more fully informed, which makes the opt-out rate a poor signal of genuine community consent.", tension: "Opt-out puts the labor of protection on the people most likely to be unaware they need it." },
+    ]
+  },
+  {
+    who: "Student",
+    term: "Hallucination",
+    title: "The Research Paper with 14 Sources",
+    scene: "You are writing a 10-page research paper. You use an AI assistant to help you find sources, and it produces a list of 14 citations — authors, titles, journals, page numbers. You spot-check three of them and they look real. You don't have time to verify all 14 individually. You build your paper around them and submit it.",
+    tensions: "Time pressure vs. academic integrity vs. epistemic responsibility",
+    choices: [
+      { text: "If three checked out, the rest probably did too. You did more due diligence than most students.", depth: "low", label: "Spot-check logic", feedback: "This is probabilistic reasoning in a domain where it doesn't apply. AI hallucinations are not uniformly distributed across a list — the model can generate perfectly real citations alongside completely fabricated ones with no signal to tell them apart. Three correct out of fourteen tells you the model can generate plausible-looking citations; it does not tell you anything about citation eleven. If your paper cites a fabricated journal article, your teacher finds it, and you can only say 'I checked three,' the argument does not hold.", tension: "AI errors in citation are not rare edge cases — they are a known, documented, common failure mode of every major language model currently available." },
+      { text: "You submit it but add a note: 'Citations generated with AI assistance — teacher may wish to verify.' Honesty without doing the verification work yourself.", depth: "mid", label: "Disclosed but unverified", feedback: "Disclosure is genuinely better than silence. But this puts verification labor onto the teacher for work that was your academic responsibility. The question is whether disclosure of process substitutes for epistemic responsibility over the product. If you would not cite a Wikipedia article as a primary source even after disclosing it, the standard for AI-generated citations should be similar: disclose the process, but verify the output before making factual claims based on it.", tension: "Transparency about your process does not transfer your responsibility for the accuracy of your claims to the reader." },
+      { text: "Stay up late and verify every citation before submitting. Use the AI list as a starting point, not a source list.", depth: "deep", label: "Full verification", feedback: "This is the correct epistemic standard, and it is worth naming why: when you cite a source, you are implicitly claiming to have engaged with it. Using an AI to generate citations and submitting them unverified means you are claiming intellectual engagement with sources you have never actually accessed. That is not a gray area — it is a form of misrepresentation, regardless of whether any individual citation happens to be accurate.", tension: "Citation is a promise to your reader about what you actually read. AI cannot make that promise on your behalf." },
+    ]
+  },
+  {
+    who: "Teacher",
+    term: "Surveillance Creep",
+    title: "The Proctoring Software That Keeps Expanding",
+    scene: "Your school adopted an AI proctoring tool during remote learning to monitor students during exams. Two years later, in-person learning has returned but the tool is still in use — now for at-home assignments and eventually for tracking time-on-task during class. A student tells you privately that she finds it anxiety-inducing and feels she is being treated like a suspect in her own bedroom.",
+    tensions: "Academic integrity vs. student wellbeing vs. institutional policy vs. trust",
+    choices: [
+      { text: "The administration approved it. Your job is to follow the policy, not to question the tools the school chose.", depth: "low", label: "Policy deference", feedback: "Teachers following institutional policy is generally appropriate. But 'I was following policy' has a limited ethical range. When a student brings you a specific, credible wellbeing concern — anxiety in her own bedroom, feeling surveilled — ignoring it entirely because the tool was approved by administration is not neutral. You are not obligated to unilaterally abandon the tool. You are professionally obligated to take the concern seriously enough to raise it somewhere.", tension: "Policy compliance does not remove your professional obligation to notice when a policy is causing identifiable harm to a specific student." },
+      { text: "Tell the student her concern is valid, document it, and bring it to the student support team and the administrator overseeing the tool — formally, with her concern in writing.", depth: "deep", label: "Formal advocacy", feedback: "This is the strongest response because it takes the concern seriously without exceeding your institutional authority, creates a record, and routes the problem to the people who actually have the power to change it. The student brought this to you because she trusted you. Documenting and escalating her concern — with her knowledge and ideally her participation — honors that trust while working through legitimate channels.", tension: "The expansion of monitoring technology into spaces that were previously private — a student's bedroom — raises questions that did not exist when the tool was first adopted and deserve explicit institutional reconsideration." },
+      { text: "Tell the student you hear her, suggest she raise it with the counselor, and leave it at that.", depth: "mid", label: "Redirect and exit", feedback: "Referring to the counselor is not wrong — the counselor may be the right person to support the student's anxiety. But it also routes a policy concern through a mental health channel, which individualizes what is a structural issue. If the proctoring tool is causing anxiety, the solution is not to help one student manage her feelings about it — it is to examine whether the tool should be used in that context at all. Redirecting without any advocacy step leaves the system unchanged.", tension: "When a structural problem produces emotional symptoms, treating the emotional symptom is not the same as addressing the structural problem." },
+    ]
+  },
+  {
+    who: "Administrator",
+    term: "Digital Equity",
+    title: "The AI Curriculum Rollout",
+    scene: "Your school is rolling out an AI-integrated curriculum across all departments. Teachers are excited. The tools are strong. Three weeks in, you notice that students in your upper-income zip codes are outperforming expectations on AI-assisted projects, while students from lower-income households — some of whom share devices at home or have inconsistent broadband — are falling further behind. The curriculum rollout was designed and approved by a committee that did not include any family voice from the most affected communities.",
+    tensions: "Innovation vs. equity vs. pace vs. community voice",
+    choices: [
+      { text: "Continue the rollout on schedule. Gaps are always temporary in the early stages of any new curriculum. They'll close as students adjust.", depth: "low", label: "Optimistic continuity", feedback: "The assumption that equity gaps in technology adoption self-correct over time is not supported by the research on digital divides — including the specific body of research on AI adoption. Early gaps in access and skill have a tendency to compound, not close, because the students with stronger starting conditions accelerate while others are still catching up. 'They'll adjust' is not a plan; it is a hope in the face of evidence that suggests the opposite.", tension: "Technology rollouts that do not account for differential access before launch do not accidentally produce equitable outcomes — they systematically produce inequitable ones." },
+      { text: "Slow the rollout immediately, conduct a home access and device audit for the affected students, and convene a family feedback session with the specific communities bearing the gap before resuming.", depth: "deep", label: "Pause and center", feedback: "This is the hardest choice because it requires institutional courage: slowing something that is working for some students in order to ensure it works for all students. But it is also the choice most aligned with the actual mission of a public school. The absence of family voice from the affected communities in the design committee is not a procedural detail — it is a structural failure that produced a predictable outcome. Bringing those voices in now, before the gap widens further, is both the ethical and the strategically sound response.", tension: "A curriculum designed without the communities most likely to bear its costs is not an equity-neutral act — it is a decision made about those communities without them." },
+      { text: "Issue hotspots and loaner devices to affected students, continue the rollout, and schedule a parent meeting for next quarter.", depth: "mid", label: "Material support with delay", feedback: "Providing devices and hotspots is a real and meaningful response to an access problem. The limitation is that digital equity is not only about hardware — it is also about fluency, support, and the literacy to engage critically with the tools. Hotspots do not address a student sharing a device with three siblings, or a parent who cannot troubleshoot a software error, or a student who has not yet developed the AI literacy skills to evaluate output. And delaying the family meeting to next quarter means the affected communities continue to have no voice in the curriculum that is widening the gap.", tension: "Device access is necessary but not sufficient for digital equity — and the communities bearing the inequity should not have to wait a quarter to be part of the conversation." },
+    ]
+  },
+  {
+    who: "Student",
+    term: "Model Transparency",
+    title: "The Grade You Cannot Explain",
+    scene: "Your school is piloting an AI system that contributes to your participation grade — it analyzes discussion posts, tracks response times, and monitors 'engagement signals.' You received a lower participation score than you expected. When you ask how it was calculated, your teacher says the system's methodology is proprietary and she can't share it. You know you participated.",
+    tensions: "Student rights vs. institutional authority vs. the limits of algorithmic grading",
+    choices: [
+      { text: "Accept it. Fighting a grade over how an AI scored you is not a battle you're going to win.", depth: "low", label: "Resignation", feedback: "Accepting a consequence you believe to be inaccurate without attempting to understand or contest it is not the same as being pragmatic — it is surrendering your right to understand how you are being evaluated. If the methodology is genuinely proprietary and cannot be explained to the student it is being applied to, that is itself a significant problem worth naming, even if naming it does not immediately change your grade.", tension: "You have a legitimate interest in understanding how you are being graded. 'Proprietary' is not a complete answer when the system is being used to evaluate your academic performance." },
+      { text: "Ask your teacher to put in writing that the grading methodology is proprietary and cannot be shared with students, then request a meeting with the administrator overseeing the pilot.", depth: "deep", label: "Documented escalation", feedback: "This is a sophisticated and principled response. You are not accusing anyone of wrongdoing; you are asking for documentation of a practice that has a direct impact on your grade and that you cannot currently interrogate. Requesting that in writing creates a record, signals that you understand the issue is institutional rather than personal, and routes the concern to the right level. Model transparency — the right to understand how an AI system affecting you works — is not a radical claim. It is a reasonable expectation.", tension: "When an AI system grades you in ways that cannot be explained to you, the problem is not just your grade — it is the precedent being set for accountability-free algorithmic evaluation." },
+      { text: "Ask your teacher if you can submit additional evidence of your participation — screenshots, examples — to be factored into the grade manually.", depth: "mid", label: "Evidence supplement", feedback: "This is a reasonable and constructive first step. It works within the existing system, treats the teacher as a partner rather than an adversary, and may actually resolve the grade discrepancy. Its limitation is that it leaves the structural question untouched: if the tool grades inaccurately and cannot explain its methodology, the problem will recur for you and for every other student in the pilot. Supplementing evidence fixes your grade; it does not address the tool.", tension: "Fixing your individual grade is legitimate. It is a different act from raising a concern about a system that may be systematically inaccurate for many students." },
+    ]
+  },
+  {
+    who: "Administrator",
+    term: "Agentic AI",
+    title: "The AI That Writes the Emails",
+    scene: "A senior administrator at your school has begun using an AI agent to draft and send emails to parents under his name. The emails are accurate, appropriately toned, and save significant time. Some parents have responded warmly to the 'personal' outreach. He argues that the content is his — he reviewed it — and that any tool that helps him communicate more frequently with families is a net positive for the school. A teacher who found out is troubled.",
+    tensions: "Efficiency vs. authenticity vs. family trust vs. institutional integrity",
+    choices: [
+      { text: "If the content is accurate and he reviewed it, the method of drafting is irrelevant. Let it continue.", depth: "low", label: "Outcome equivalence", feedback: "This position treats family communication as a content-delivery problem rather than a relational one. Parents who respond warmly to what they believe is a personal outreach are responding to the authenticity they perceive — to the sense that a human being thought of them, took time, and wrote to them. If that perception is false, the warmth is built on a misrepresentation, even if the content is accurate. The question is not whether the emails are good. It is whether the families receiving them would feel differently about them if they knew how they were produced.", tension: "Accuracy and authenticity are not the same thing. Families trust schools with their children partly because they believe the communications they receive reflect genuine human engagement." },
+      { text: "Require that any AI-generated family communication be disclosed as such, establish a school-wide policy on AI use in official communications, and share that policy with families.", depth: "deep", label: "Systemic transparency", feedback: "This is the most institutionally sound response because it treats the specific situation as a signal that the school needs a policy — not just a decision about one administrator. A policy requiring disclosure of AI-generated communications does not prohibit their use; it ensures that families understand what they are receiving. It also creates a consistent standard so that trust in school communications does not depend on which administrator happens to be writing them and what tools they happen to be using.", tension: "The families most likely to feel betrayed by undisclosed AI communications are the ones with the highest trust in the school — because trust is what makes the deception feel like a deception." },
+      { text: "Have a private conversation with the administrator and ask him to add a brief disclosure line to AI-drafted emails going forward.", depth: "mid", label: "Private correction", feedback: "This is a meaningful improvement and a reasonable first step. Its limitation is that it is a personal conversation with one person, not a policy, which means it depends on that individual's ongoing compliance and leaves the question unresolved for anyone else at the school using similar tools. If the practice is problematic when one administrator does it, it is equally problematic when others do it, and a private conversation with one person does not establish the institutional standard the situation calls for.", tension: "Individual correction without institutional policy creates inconsistent standards — and inconsistent standards in family trust-building are harder to recover from than explicit policies, even imperfect ones." },
+    ]
+  },
+];
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let selectedRole = null;
+let vocabDeck = [];
+let scenarioDeck = [];
+let vocabIndex = 0;
+let scenarioIndex = 0;
+let phase = 'intro'; // intro | vocab | scenario | feedback | summary
+let vocabAnswered = false;
+let scenarioAnswered = false;
+let stats = { vocabCorrect: 0, deepChoices: 0, reflections: 0 };
+let log = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildDecks() {
+  vocabDeck = shuffle(VOCAB);
+  scenarioDeck = shuffle(SCENARIOS);
+}
+
+// ─────────────────────────────────────────────
+// PIPS
+// ─────────────────────────────────────────────
+function renderPips() {
+  const total = SCENARIOS.length;
+  const pips = document.getElementById('pips');
+  const meta = document.getElementById('headerMeta');
+  if (!pips) return;
+  if (phase === 'intro') { pips.innerHTML = ''; meta.textContent = 'AI Ethics & Literacy'; return; }
+  if (phase === 'summary') { meta.textContent = 'Signal Report'; }
+  else { meta.textContent = `Round ${scenarioIndex + 1} of ${total}`; }
+  pips.innerHTML = Array.from({ length: total }, (_, i) => {
+    let cls = 'pip';
+    if (i < scenarioIndex) cls += ' done';
+    else if (i === scenarioIndex && phase !== 'summary') cls += ' active';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────
+// RENDER HELPERS
+// ─────────────────────────────────────────────
+const main = document.getElementById('main');
+function setMain(html) { main.innerHTML = html; renderPips(); }
+
+// ─────────────────────────────────────────────
+// INTRO
+// ─────────────────────────────────────────────
+function renderIntro() {
+  phase = 'intro';
+  renderPips();
+  setMain(`
+    <div class="card">
+      <div class="intro-eyebrow">AI Ethics &amp; Literacy</div>
+      <h1 class="intro-title">The <em>Frequency</em></h1>
+      <p class="intro-body">
+        Every school in the country is making decisions about AI right now — what tools to adopt, what to prohibit, how to grade, who gets access, what counts as cheating, and who bears the cost when something goes wrong. <strong>Most of those decisions are made without a shared vocabulary or a shared ethical framework.</strong>
+      </p>
+      <p class="intro-body">
+        This is not a quiz with right answers. It is a thinking exercise — eight vocabulary terms that shape the AI conversation in schools, and eight real scenarios that each have a defensible choice and a more defensible one. What separates them is usually depth of reasoning, not intent.
+      </p>
+      <div class="callout-block">
+        Each round: define a term → face a real dilemma involving that term → reflect on why different choices carry different weight. You can play as a student, teacher, or administrator — your role shapes which scenarios you see first, but all scenarios are open to everyone.
+      </div>
+      <div class="role-select-label">Choose your role to begin</div>
+      <div class="role-grid">
+        <button class="role-btn ${selectedRole === 'student' ? 'selected' : ''}" onclick="selectRole('student')">
+          <div class="role-icon">🎒</div>
+          <div class="role-name">Student</div>
+          <div class="role-sub">Grades 9–12</div>
+        </button>
+        <button class="role-btn ${selectedRole === 'teacher' ? 'selected' : ''}" onclick="selectRole('teacher')">
+          <div class="role-icon">📋</div>
+          <div class="role-name">Teacher</div>
+          <div class="role-sub">Faculty &amp; Staff</div>
+        </button>
+        <button class="role-btn ${selectedRole === 'admin' ? 'selected' : ''}" onclick="selectRole('admin')">
+          <div class="role-icon">🏛️</div>
+          <div class="role-name">Administrator</div>
+          <div class="role-sub">Leadership</div>
+        </button>
+      </div>
+      <div style="margin-bottom:24px;">
+        <div class="role-select-label" style="margin-bottom:12px;">How it works</div>
+        <div class="how-grid">
+          <div class="how-item"><div class="how-num">01 · DEFINE</div><div class="how-desc">Match a key AI literacy term to its correct definition. Context matters.</div></div>
+          <div class="how-item"><div class="how-num">02 · DECIDE</div><div class="how-desc">Face a real ethical dilemma — student, teacher, or administrator — and choose a path.</div></div>
+          <div class="how-item"><div class="how-num">03 · REFLECT</div><div class="how-desc">Read the reasoning behind each choice. Write a sentence. Think out loud.</div></div>
+        </div>
+      </div>
+      <button class="start-btn" id="startBtn" onclick="startGame()" ${selectedRole ? '' : 'disabled'}>
+        Begin — Round 1 of ${SCENARIOS.length}
+      </button>
+    </div>
+  `);
+}
+
+function selectRole(role) {
+  selectedRole = role;
+  renderIntro();
+}
+
+// ─────────────────────────────────────────────
+// VOCAB
+// ─────────────────────────────────────────────
+function renderVocab() {
+  phase = 'vocab';
+  vocabAnswered = false;
+  const v = vocabDeck[vocabIndex];
+  const shuffled = shuffle(v.defs.map((d, i) => ({ ...d, origIdx: i })));
+  renderPips();
+  setMain(`
+    <div class="card">
+      <div class="round-label">Round ${scenarioIndex + 1} · Vocabulary</div>
+      <div class="term-display">${v.term}</div>
+      <div class="term-context">As used in the context of: ${v.context}</div>
+      <div class="choices-list" id="vocabChoices">
+        ${shuffled.map((d, i) => `
+          <button class="choice" onclick="answerVocab(${d.correct})" id="vc${i}">
+            <span class="choice-key">${String.fromCharCode(65 + i)}</span>
+            <span>${d.text}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div id="vocabResult"></div>
+    </div>
+  `);
+}
+
+function answerVocab(correct) {
+  if (vocabAnswered) return;
+  vocabAnswered = true;
+  if (correct) stats.vocabCorrect++;
+  const v = vocabDeck[vocabIndex];
+  const btns = document.querySelectorAll('.choice');
+  btns.forEach(b => b.disabled = true);
+
+  // highlight correct
+  document.querySelectorAll('.choice').forEach((b, i) => {
+    const txt = b.querySelector('span:last-child').textContent;
+    const match = v.defs.find(d => d.text === txt);
+    if (match && match.correct) b.classList.add('correct');
+  });
+  if (!correct) {
+    // find clicked button — the one that triggered this
+    document.querySelectorAll('.choice').forEach(b => {
+      const txt = b.querySelector('span:last-child').textContent;
+      const match = v.defs.find(d => d.text === txt);
+      if (match && !match.correct) b.classList.add('wrong');
+    });
+  }
+
+  document.getElementById('vocabResult').innerHTML = `
+    <div class="vocab-result">
+      <div class="result-status ${correct ? 'ok' : 'no'}">${correct ? '✓ Tuned in' : '✗ Off frequency'}</div>
+      <div class="result-body">${v.explanation}</div>
+    </div>
+    <button class="next-btn" onclick="goToScenario()">
+      Continue to the dilemma &nbsp;→
+    </button>
+    <div class="kbd-hint">or press <kbd class="kbd">Enter</kbd></div>
+  `;
+}
+
+// ─────────────────────────────────────────────
+// SCENARIO
+// ─────────────────────────────────────────────
+function renderScenario() {
+  phase = 'scenario';
+  scenarioAnswered = false;
+  const s = scenarioDeck[scenarioIndex];
+  renderPips();
+  setMain(`
+    <div class="card">
+      <div class="round-label">Round ${scenarioIndex + 1} · Dilemma</div>
+      <div class="scenario-header">
+        <div class="scenario-who">👤 ${s.who}</div>
+        <div class="scenario-term-badge">${s.term}</div>
+      </div>
+      <div class="scenario-title">${s.title}</div>
+      <div class="scenario-scene">${s.scene}</div>
+      <div class="tension-label">Core tensions: ${s.tensions}</div>
+      <div class="scenario-choices" id="scenChoices">
+        ${s.choices.map((c, i) => `
+          <button class="s-choice" onclick="chooseScenario(${i})" id="sc${i}">
+            <span class="s-key">${String.fromCharCode(65 + i)}</span>
+            <span>${c.text}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div id="scenFeedback"></div>
+    </div>
+  `);
+}
+
+function chooseScenario(idx) {
+  if (scenarioAnswered) return;
+  scenarioAnswered = true;
+  const s = scenarioDeck[scenarioIndex];
+  const c = s.choices[idx];
+
+  if (c.depth === 'deep') stats.deepChoices++;
+  log.push({ scenario: s.title, who: s.who, choiceText: c.text, depth: c.depth, label: c.label });
+
+  const btns = document.querySelectorAll('.s-choice');
+  btns.forEach((b, i) => {
+    b.disabled = true;
+    const d = s.choices[i].depth;
+    b.classList.add(`selected-${d}`);
+  });
+
+  const depthMeta = {
+    deep: { label: 'Deep Reasoning', color: 'var(--green)', cls: 'depth-deep', fill: 90 },
+    mid:  { label: 'Partial Reasoning', color: 'var(--blue)',  cls: 'depth-mid',  fill: 55 },
+    low:  { label: 'Surface Reasoning', color: 'var(--red)',   cls: 'depth-low',  fill: 18 },
+  }[c.depth];
+
+  document.getElementById('scenFeedback').innerHTML = `
+    <div class="feedback-card">
+      <div class="feedback-top">
+        <div class="depth-label ${depthMeta.cls}">${depthMeta.label} — ${c.label}</div>
+        <div class="feedback-choice-echo">You chose: <span>${c.text}</span></div>
+      </div>
+      <div class="feedback-body-wrap">
+        <div class="depth-meter-wrap">
+          <div class="depth-meter-heads"><span>Surface</span><span>Deep</span></div>
+          <div class="depth-track">
+            <div class="depth-fill" id="dfill" style="width:0%;background:${depthMeta.color};"></div>
+          </div>
+        </div>
+        <div class="feedback-main">${c.feedback}</div>
+        <div class="tension-reveal">
+          <div class="tension-reveal-label">The core tension</div>
+          <div class="tension-reveal-body">${c.tension}</div>
+        </div>
+        <div class="reflection-wrap">
+          <div class="reflection-label">Optional: How would you explain this choice to someone who chose differently?</div>
+          <textarea class="reflect" id="reflectBox" placeholder="Write a sentence or two — just for yourself. Not saved, not graded."></textarea>
+          <div class="reflect-hint">The point is not the answer. It's noticing what you actually think when you have to say it out loud.</div>
+        </div>
+        <button class="next-btn" onclick="nextRound()">
+          ${scenarioIndex < scenarioDeck.length - 1 ? 'Next round →' : 'See your signal report →'}
+        </button>
+        <div class="kbd-hint">or press <kbd class="kbd">Enter</kbd></div>
+      </div>
+    </div>
+  `;
+  requestAnimationFrame(() => {
+    const fill = document.getElementById('dfill');
+    if (fill) fill.style.width = depthMeta.fill + '%';
+  });
+}
+
+// ─────────────────────────────────────────────
+// FLOW CONTROL
+// ─────────────────────────────────────────────
+function startGame() {
+  if (!selectedRole) return;
+  buildDecks();
+  // sort decks so selected role appears first
+  const roleMap = { student: 'Student', teacher: 'Teacher', admin: 'Administrator' };
+  const roleLabel = roleMap[selectedRole];
+  scenarioDeck = [
+    ...scenarioDeck.filter(s => s.who === roleLabel),
+    ...scenarioDeck.filter(s => s.who !== roleLabel),
+  ];
+  vocabIndex = 0;
+  scenarioIndex = 0;
+  stats = { vocabCorrect: 0, deepChoices: 0, reflections: 0 };
+  log = [];
+  renderVocab();
+}
+
+function goToScenario() {
+  renderScenario();
+}
+
+function nextRound() {
+  const box = document.getElementById('reflectBox');
+  if (box && box.value.trim().length > 5) stats.reflections++;
+  if (scenarioIndex < scenarioDeck.length - 1) {
+    scenarioIndex++;
+    vocabIndex = Math.min(vocabIndex + 1, vocabDeck.length - 1);
+    renderVocab();
+  } else {
+    renderSummary();
+  }
+}
+
+// ─────────────────────────────────────────────
+// SUMMARY
+// ─────────────────────────────────────────────
+function getPersona() {
+  const deep = stats.deepChoices;
+  if (deep >= 7) return { icon: '🔬', title: 'Systems Thinker', subtitle: 'You consistently reasoned past the immediate situation.', blurb: 'You showed a consistent ability to see the structural dimension of individual choices — to ask not just "what is the right thing to do here" but "what does this choice say about the system and what it enables or prevents." That\'s the highest-order ethical thinking in complex institutions.' };
+  if (deep >= 5) return { icon: '⚖️', title: 'Principled Reasoner', subtitle: 'Strong ethical instincts with occasional pragmatic pulls.', blurb: 'Your reasoning was grounded and thoughtful, and you generally pushed past the surface choice. A few times, the immediate pragmatic solution pulled you away from the fuller picture. The difference between those two types of choices is usually visible in whether you asked whose burden was being shifted by your decision.' };
+  if (deep >= 3) return { icon: '🧭', title: 'Developing Framework', subtitle: 'Solid intuitions, building toward systemic thinking.', blurb: 'You identified the right tensions in most scenarios but sometimes resolved them at the level that was least costly to you in the moment. That\'s very human. The skill being built here is the capacity to stay with discomfort long enough to reason through what the situation actually calls for — not just what it allows.' };
+  return { icon: '📡', title: 'Signal Seeker', subtitle: 'You\'re picking up the frequency. Keep tuning.', blurb: 'The fact that you engaged with all eight scenarios honestly is itself the beginning of the practice. AI ethics is not a set of rules — it is a set of habits of mind. Coming back to these scenarios and playing again with a different role is one of the most useful things you can do right now.' };
+}
+
+function renderSummary() {
+  phase = 'summary';
+  renderPips();
+  const persona = getPersona();
+  const avgDepth = Math.round((stats.deepChoices / SCENARIOS.length) * 100);
+
+  const logHtml = log.map(e => {
+    const cls = e.depth === 'deep' ? 'badge-deep' : e.depth === 'mid' ? 'badge-mid' : 'badge-low';
+    return `
+      <div class="log-row">
+        <div class="log-left">
+          <div class="log-scenario">${e.who} · ${e.scenario}</div>
+          <div class="log-choice">${e.choiceText}</div>
+        </div>
+        <div class="log-badge ${cls}">${e.label}</div>
+      </div>`;
+  }).join('');
+
+  const glossaryHtml = VOCAB.map(v => `
+    <div class="g-card">
+      <div class="g-term">${v.term}</div>
+      <div class="g-def">${v.defs.find(d => d.correct).text}</div>
+    </div>`).join('');
+
+  setMain(`
+    <div class="card">
+      <div class="summary-eyebrow">Signal Report</div>
+      <div class="summary-persona-row">
+        <div class="persona-icon-big">${persona.icon}</div>
+        <div>
+          <div class="summary-title">${persona.title}</div>
+          <div class="summary-subtitle">${persona.subtitle}</div>
+        </div>
+      </div>
+      <p class="summary-blurb">${persona.blurb}</p>
+      <div class="depth-meter-wrap" style="margin-bottom:28px;">
+        <div class="depth-meter-heads"><span>Surface reasoning</span><span>Deep reasoning</span></div>
+        <div class="depth-track">
+          <div class="depth-fill" id="summFill" style="width:0%;background:var(--amber);"></div>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num">${stats.vocabCorrect}/8</div><div class="stat-label">Terms tuned</div></div>
+        <div class="stat-card"><div class="stat-num">${stats.deepChoices}/8</div><div class="stat-label">Deep choices</div></div>
+        <div class="stat-card"><div class="stat-num">${stats.reflections}</div><div class="stat-label">Reflections written</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-head">Case Log</div>
+      <div class="case-log">${logHtml}</div>
+      <div class="closing-note">
+        The eight dilemmas in this game do not exhaust the AI ethics questions your school is currently navigating — they are a representative sample of the ones already in classrooms, staffrooms, and administrative offices. The vocabulary terms are the conceptual tools. The scenarios are what the tools are for. The goal is not to leave with the right answers. It is to leave better at asking the right questions before you make a decision that affects someone else.
+      </div>
+      <button class="restart-btn" onclick="restart()">Play again with a different role</button>
+    </div>
+
+    <div class="card">
+      <div class="section-head">Full Glossary</div>
+      <div class="glossary-grid">${glossaryHtml}</div>
+    </div>
+  `);
+
+  requestAnimationFrame(() => {
+    const fill = document.getElementById('summFill');
+    if (fill) setTimeout(() => fill.style.width = avgDepth + '%', 100);
+  });
+}
+
+function restart() {
+  selectedRole = null;
+  renderIntro();
+}
+
+// ─────────────────────────────────────────────
+// KEYBOARD
+// ─────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (phase === 'vocab' && !vocabAnswered) {
+    const idx = ['1','2','3'].indexOf(e.key);
+    if (idx !== -1) {
+      const btns = document.querySelectorAll('.choice');
+      if (btns[idx]) btns[idx].click();
+    }
+  } else if (phase === 'vocab' && vocabAnswered && e.key === 'Enter') {
+    goToScenario();
+  } else if (phase === 'scenario' && !scenarioAnswered) {
+    const idx = ['1','2','3'].indexOf(e.key);
+    if (idx !== -1) {
+      const btns = document.querySelectorAll('.s-choice');
+      if (btns[idx]) btns[idx].click();
+    }
+  } else if (phase === 'scenario' && scenarioAnswered && e.key === 'Enter') {
+    const reflectBox = document.getElementById('reflectBox');
+    if (document.activeElement !== reflectBox) nextRound();
+  }
+});
+
+// ─────────────────────────────────────────────
+// BOOT
+// ─────────────────────────────────────────────
+renderIntro();
+</script>
+</body>
+</html>
